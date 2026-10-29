@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COE-Pay Centralized Gateway | ICCT Colleges Foundation, Inc.</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            brand: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 min-h-screen flex flex-col justify-between text-slate-800 antialiased selection:bg-emerald-700 selection:text-white relative">
+
+  <!-- TOP GLOBAL NAVBAR -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-800 to-teal-900 text-amber-300 flex items-center justify-center font-bold text-lg shadow-sm flex-shrink-0">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold font-brand tracking-tight text-lg text-slate-900">COE-Pay Centralized Gateway</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 font-mono">Official Gateway</span>
+          </div>
+          <p class="text-[10px] text-slate-500 font-medium tracking-tight">ICCT COLLEGES FOUNDATION, INC. • COLLEGE OF ENGINEERING & DIGITAL TECHNOLOGY</p>
+        </div>
+      </div>
+
+      <!-- Gateway Online Badge & Reset Button -->
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Gateway Online</span>
+        </span>
+        <button onclick="localStorage.clear(); sessionStorage.clear(); location.reload();" 
+                class="px-3 py-1.5 rounded-xl border border-slate-200 hover:border-rose-200 text-slate-500 hover:text-rose-600 hover:bg-rose-50 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Reset / Logout</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main id="main-app-container" class="flex-1 w-full relative flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    
+    <!-- FULL-SCREEN BACKDROP: CAINTA CAMPUS -->
+    <div id="portal-backdrop" class="fixed inset-0 z-0 pointer-events-none select-none overflow-hidden">
+      <img src="js/assets/cainta-campus.jpeg" 
+           alt="ICCT Campus Backdrop" 
+           class="w-full h-full object-cover object-center filter brightness-[0.70] contrast-[1.05]"
+           onerror="if(!this.dataset.r1){this.dataset.r1=1;this.src='assets/cainta-campus.jpeg';}else if(!this.dataset.r2){this.dataset.r2=1;this.src='cainta-campus.jpeg';}">
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/60 to-emerald-950/75 backdrop-blur-[2px]"></div>
+    </div>
+
+    <!-- 2-COLUMN BALANCED LOGIN GRID -->
+    <div id="portal-login-grid" class="relative z-10 w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto">
+      
+      <!-- KALIWANG COLUMN -->
+      <div class="lg:col-span-7 space-y-4 text-left">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-emerald-900/70 text-emerald-200 border border-emerald-500/40 backdrop-blur-md shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <i class="fa-solid fa-building-columns text-[11px]"></i> ICCT Colleges Cainta Main Campus
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black font-brand tracking-tight text-white leading-tight drop-shadow-lg">
+          Institute of <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-200 to-amber-200">Creative Computer</span> <br>
+          Technology
+        </h1>
+
+        <p class="text-base sm:text-lg text-emerald-100/90 max-w-xl font-normal leading-relaxed drop-shadow-sm">
+          Centralized Student Payment Authorization, Collection, and Academic Clearance Gateway.
+        </p>
+
+        <div class="pt-2">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-amber-400/90 text-slate-950 shadow-sm font-mono">
+            COE-Pay Centralized Gateway
+          </span>
+        </div>
+      </div>
+
+      <!-- KANANG COLUMN: DYNAMIC AUTH CARD (STEP 1: LOGIN & STEP 2: OTP) -->
+      <div class="lg:col-span-5 w-full max-w-md mx-auto lg:mx-0">
+        <div class="bg-white/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-7 border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.40)] space-y-4">
+          
+          <!-- STEP 1: CREDENTIALS VIEW -->
+          <div id="auth-step-credentials" class="space-y-4">
+            
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div>
+                <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block font-mono">PORTAL ACCESS</span>
+                <h2 class="text-xl font-extrabold font-brand text-slate-900 mt-0.5">Sign in to COE-Pay</h2>
+              </div>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono bg-emerald-50 text-emerald-800 border border-emerald-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                2FA ACTIVE
+              </span>
+            </div>
+
+            <div class="space-y-3.5">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+                  <i class="fa-solid fa-user text-slate-500 text-[10px]"></i>
+                  <span>Username, Email, or Student ID *</span>
+                </label>
+                <div class="relative">
+                  <input type="text" id="coe-login-input" 
+                         placeholder="e.g. 2023-10001, engr.mendoza, or developer"
+                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 font-mono focus:outline-none focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 transition">
+                  <i class="fa-solid fa-key text-slate-400 absolute right-3 top-2.5 text-xs"></i>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-[11px] font-bold text-slate-800 flex items-center gap-1.5">
+                    <i class="fa-solid fa-lock text-slate-500 text-[10px]"></i>
+                    <span>Password *</span>
+                  </label>
+                  <a href="#" onclick="alert('Please contact your department coordinator to reset credentials.')" class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 hover:underline">
+                    Forgot Password?
+                  </a>
+                </div>
+                <div class="relative">
+                  <input type="password" id="coe-login-password" 
+                         placeholder="Enter password (default: password123)"
+                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 font-mono focus:outline-none focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 transition">
+                  <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-xs">
+                    <i id="pwd-eye-icon" class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="p-2.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl flex items-start gap-2 text-xs text-emerald-950">
+                <i class="fa-solid fa-shield-halved text-emerald-700 text-xs mt-0.5 flex-shrink-0"></i>
+                <p class="text-[10px] leading-relaxed text-slate-700">
+                  <strong class="text-emerald-950 font-bold">Two-Factor Security:</strong> Enter credentials. Once verified, a 6-digit One-Time Password (OTP) will be dispatched to your institutional email.
+                </p>
+              </div>
+
+              <button type="button" onclick="handlePortalSubmit()" 
+                      class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 hover:from-emerald-800 hover:to-teal-800 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer font-sans">
+                <span>Sign In with 2-Factor Authentication</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </button>
+            </div>
+
+            <!-- Quick Fill Buttons -->
+            <div class="pt-2 border-t border-slate-100 space-y-2">
+              <div class="flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <span class="font-bold uppercase tracking-wider text-slate-600">
+                  <i class="fa-solid fa-users text-slate-400"></i> QUICK FILL:
+                </span>
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">
+                  PASS: PASSWORD123
+                </span>
+              </div>
+
+              <div class="grid grid-cols-4 gap-1.5 text-xs">
+                <button type="button" onclick="quickFill('2023-10001', 'password123')" 
+                        class="py-1 px-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 hover:text-emerald-800 transition text-[10px] flex items-center justify-center gap-1 font-mono cursor-pointer">
+                  <i class="fa-solid fa-graduation-cap text-[9px] text-slate-400"></i> Student
+                </button>
+                <button type="button" onclick="quickFill('engr.mendoza@icct.edu.ph', 'password123')" 
+                        class="py-1 px-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 hover:text-emerald-800 transition text-[10px] flex items-center justify-center gap-1 font-mono cursor-pointer">
+                  <i class="fa-solid fa-user-tie text-[9px] text-slate-400"></i> Coord
+                </button>
+                <button type="button" onclick="quickFill('officer@icct.edu.ph', 'password123')" 
+                        class="py-1 px-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 hover:text-emerald-800 transition text-[10px] flex items-center justify-center gap-1 font-mono cursor-pointer">
+                  <i class="fa-solid fa-calculator text-[9px] text-slate-400"></i> Officer
+                </button>
+                <button type="button" onclick="quickFill('developer', 'password123')" 
+                        class="py-1 px-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 hover:text-emerald-800 transition text-[10px] flex items-center justify-center gap-1 font-mono cursor-pointer">
+                  <i class="fa-solid fa-code text-[9px] text-slate-400"></i> Dev
+                </button>
+              </div>
+            </div>
+
+            <p class="text-center text-[9px] text-slate-400 font-mono pt-1 border-t border-slate-100 flex items-center justify-center gap-1">
+              <i class="fa-solid fa-lock text-emerald-600"></i>
+              <span>Protected by Institutional 2FA Verification & Audit Logging</span>
+            </p>
+
+          </div>
+
+          <!-- STEP 2: 6-DIGIT OTP VERIFICATION VIEW -->
+          <div id="auth-step-otp" class="hidden space-y-4">
+            
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div>
+                <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider block font-mono">TWO-FACTOR VERIFICATION</span>
+                <h2 class="text-xl font-extrabold font-brand text-slate-900 mt-0.5">Enter 6-Digit OTP</h2>
+              </div>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono bg-amber-50 text-amber-800 border border-amber-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                DISPATCHED
+              </span>
+            </div>
+
+            <!-- OTP Notice & Target Account -->
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-1 text-xs">
+              <div class="flex items-center justify-between font-mono">
+                <span class="text-slate-400 text-[10px] uppercase font-bold">VERIFYING ACCOUNT:</span>
+                <span id="otp-target-role" class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">Student</span>
+              </div>
+              <div id="otp-target-name" class="font-bold text-slate-900 text-sm">Christian Dave Guiyab</div>
+              <div id="otp-target-email" class="text-[11px] text-slate-500 font-mono">Sent to c***@students.icct.edu.ph</div>
+            </div>
+
+            <!-- 6 DIGIT INPUTS -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-2 font-mono text-center">
+                Enter One-Time PIN (Any 6 Digits)
+              </label>
+              <div class="grid grid-cols-6 gap-2">
+                <input type="text" maxlength="1" value="1" class="otp-digit text-center font-mono font-black text-lg py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition">
+                <input type="text" maxlength="1" value="2" class="otp-digit text-center font-mono font-black text-lg py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition">
+                <input type="text" maxlength="1" value="3" class="otp-digit text-center font-mono font-black text-lg py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition">
+                <input type="text" maxlength="1" value="4" class="otp-digit text-center font-mono font-black text-lg py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition">
+                <input type="text" maxlength="1" value="5" class="otp-digit text-center font-mono font-black text-lg py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition">
+                <input type="text" maxlength="1" value="6" class="otp-digit text-center font-mono font-black text-lg py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition">
+              </div>
+            </div>
+
+            <!-- OTP Action Buttons -->
+            <div class="space-y-2 pt-1">
+              <button type="button" onclick="verifyOtpAndProceed()" 
+                      class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-900 text-amber-200 font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer font-sans">
+                <i class="fa-solid fa-shield-check text-xs"></i>
+                <span>Verify OTP & Enter Gateway</span>
+              </button>
+
+              <button type="button" onclick="backToCredentials()" 
+                      class="w-full py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 font-semibold text-xs transition cursor-pointer">
+                Back to Login
+              </button>
+            </div>
+
+            <!-- Resend Timer Notice -->
+            <div class="text-center text-[10px] text-slate-400 font-mono pt-1">
+              <span>Didn't receive the code? </span>
+              <a href="#" onclick="alert('New OTP code dispatched to your registered email.')" class="font-bold text-emerald-700 hover:underline">Resend OTP</a>
+              <span class="text-slate-300"> (0:59)</span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Active View Mount Points -->
+    <div id="developer-view-container" class="w-full hidden"></div>
+    <div id="personnel-view-container" class="w-full hidden"></div>
+    <div id="admin-view-container" class="w-full hidden"></div>
+    <div id="student-view-container" class="w-full hidden"></div>
+    <div id="login-view-container" class="w-full hidden"></div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900/90 backdrop-blur-md border-t border-slate-800 py-3 text-center text-xs text-slate-400 font-mono z-10">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2 text-slate-300">
+        <i class="fa-solid fa-building-columns text-emerald-400"></i>
+        <span>COE-Pay Centralized Gateway • ICCT Colleges Foundation, Inc.</span>
+      </div>
+      <div class="flex items-center gap-4 text-[11px]">
+        <span class="flex items-center gap-1 text-emerald-400 font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Central Database Connected
+        </span>
+        <span class="text-slate-500">Version 2.4</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Helper Scripts for Credentials, OTP Flow & Role Routing -->
+  <script>
+    let pendingUserObject = null;
+
+    function quickFill(user, pass) {
+      const u = document.getElementById('coe-login-input');
+      const p = document.getElementById('coe-login-password');
+      if (u) u.value = user;
+      if (p) p.value = pass;
+    }
+
+    function togglePasswordVisibility() {
+      const p = document.getElementById('coe-login-password');
+      const icon = document.getElementById('pwd-eye-icon');
+      if (!p || !icon) return;
+      if (p.type === 'password') {
+        p.type = 'text';
+        icon.className = 'fa-regular fa-eye-slash';
+      } else {
+        p.type = 'password';
+        icon.className = 'fa-regular fa-eye';
+      }
+    }
+
+    // Step 1: Validate input, build user object, show OTP Screen
+    function handlePortalSubmit() {
+      const input = document.getElementById('coe-login-input');
+      const val = input ? input.value.trim() : '';
+      if (!val) {
+        alert('Please enter your Student ID or Username.');
+        return;
+      }
+
+      const lower = val.toLowerCase();
+      let role = 'student';
+      let name = 'Christian Dave Guiyab';
+      let email = val.includes('@') ? val : `${val}@students.icct.edu.ph`;
+      let studentNo = val.replace(/[^0-9-]/g, '') || '2023-10001';
+
+      if (lower === 'developer' || lower.includes('dev')) {
+        role = 'developer';
+        name = 'Dave Guiyab';
+        email = 'dev@icct.edu.ph';
+      } else if (lower.includes('mendoza') || lower.includes('admin') || lower.includes('coord')) {
+        role = 'coordinator';
+        name = 'Engr. Ivanlee Mendoza';
+        email = 'engr.mendoza@icct.edu.ph';
+      } else if (lower.includes('pearl') || lower.includes('officer') || lower.includes('treasurer')) {
+        role = 'officer';
+        name = 'Engr. Pearl Catequista';
+        email = 'officer@icct.edu.ph';
+      } else if (lower.includes('10004') || lower.includes('opana')) {
+        role = 'student';
+        name = 'Jerome Opana';
+        studentNo = '2023-10004';
+      }
+
+      pendingUserObject = {
+        id: 'usr-' + Date.now(),
+        username: val,
+        role: role,
+        full_name: name,
+        email: email,
+        student_no: studentNo,
+        section: 'BSCpE-4A'
+      };
+
+      // I-update ang text details sa OTP Card
+      const targetRole = document.getElementById('otp-target-role');
+      const targetName = document.getElementById('otp-target-name');
+      const targetEmail = document.getElementById('otp-target-email');
+
+      if (targetRole) targetRole.innerText = role.toUpperCase();
+      if (targetName) targetName.innerText = name;
+      if (targetEmail) {
+        const masked = email.replace(/^(.)(.*)(@.*)$/, (m, a, b, c) => a + '***' + c);
+        targetEmail.innerText = `Sent to ${masked}`;
+      }
+
+      // Palitan ang screen: Itago ang credentials, ilabas ang OTP
+      document.getElementById('auth-step-credentials').classList.add('hidden');
+      document.getElementById('auth-step-otp').classList.remove('hidden');
+
+      // Auto focus sa unang digit
+      const digits = document.querySelectorAll('.otp-digit');
+      if (digits.length > 0) digits[0].focus();
+    }
+
+    function backToCredentials() {
+      document.getElementById('auth-step-otp').classList.add('hidden');
+      document.getElementById('auth-step-credentials').classList.remove('hidden');
+    }
+
+    // Step 2: Anumang digits ang ilagay, tutuloy sa dashboard
+    function verifyOtpAndProceed() {
+      if (!pendingUserObject) {
+        backToCredentials();
+        return;
+      }
+
+      const user = pendingUserObject;
+
+      // I-save ang session
+      localStorage.setItem('coepay_current_user', JSON.stringify(user));
+      sessionStorage.setItem('coepay_current_user', JSON.stringify(user));
+
+      if (window.coeAuth && typeof window.coeAuth.setCurrentUser === 'function') {
+        window.coeAuth.setCurrentUser(user);
+      } else if (window.CoeAuth && typeof window.CoeAuth.setCurrentUser === 'function') {
+        window.CoeAuth.setCurrentUser(user);
+      }
+
+      routeToDashboard(user.role);
+    }
+
+    function routeToDashboard(role) {
+      const main = document.getElementById('main-app-container');
+      if (main) main.className = "flex-1 w-full relative p-0 m-0 block";
+
+      const grid = document.getElementById('portal-login-grid');
+      if (grid) grid.style.display = 'none';
+      const bg = document.getElementById('portal-backdrop');
+      if (bg) bg.style.display = 'none';
+
+      ['developer', 'personnel', 'admin', 'student'].forEach(type => {
+        const el = document.getElementById(`${type}-view-container`);
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('block');
+        }
+      });
+
+      if (role === 'developer') {
+        const dev = document.getElementById('developer-view-container');
+        if (dev) dev.classList.remove('hidden');
+        if (window.CoeDeveloperView && typeof window.CoeDeveloperView.render === 'function') window.CoeDeveloperView.render();
+      } else if (role === 'officer') {
+        const pers = document.getElementById('personnel-view-container');
+        if (pers) pers.classList.remove('hidden');
+        if (window.CoePersonnelView && typeof window.CoePersonnelView.render === 'function') window.CoePersonnelView.render();
+      } else if (role === 'coordinator') {
+        const adm = document.getElementById('admin-view-container');
+        if (adm) adm.classList.remove('hidden');
+        if (window.CoeAdminView && typeof window.CoeAdminView.render === 'function') window.CoeAdminView.render();
+      } else {
+        const std = document.getElementById('student-view-container');
+        if (std) std.classList.remove('hidden');
+        if (window.CoeStudentView && typeof window.CoeStudentView.render === 'function') window.CoeStudentView.render();
+      }
+    }
+
+    // Auto-advance sa bawat OTP digit box
+    document.addEventListener('input', function(e) {
+      if (e.target.classList.contains('otp-digit')) {
+        if (e.target.value.length === 1) {
+          const next = e.target.nextElementSibling;
+          if (next && next.classList.contains('otp-digit')) next.focus();
+        }
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.target.classList.contains('otp-digit') && e.key === 'Backspace' && !e.target.value) {
+        const prev = e.target.previousElementSibling;
+        if (prev && prev.classList.contains('otp-digit')) prev.focus();
+      }
+    });
+  </script>
+
+  <!-- SCRIPTS -->
+  <script src="js/receipt-helper.js"></script>
+  <script src="js/masterlist-upload.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/student-view.js"></script>
+  <script src="js/admin-view.js"></script>
+  <script src="js/personnel-view.js"></script>
+  <script src="js/developer-view.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
